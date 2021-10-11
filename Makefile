@@ -201,9 +201,11 @@ generate-clientset: $(VENDOR_MODULES)
 		github.com/submariner-io/submariner-operator/apis \
 		submariner:v1alpha1
 
-# Generate code
-generate: $(CONTROLLER_GEN) $(VENDOR_MODULES)
-	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt,year=$(shell date +"%Y")" paths="./..."
+# Generate deep-copy code
+CONTROLLER_DEEPCOPY := apis/submariner/v1alpha1/zz_generated.deepcopy.go
+generate: $(CONTROLLER_DEEPCOPY)
+$(CONTROLLER_DEEPCOPY): $(CONTROLLER_GEN) $(VENDOR_MODULES)
+	cd apis && $(CONTROLLER_GEN) object:headerFile="$(CURDIR)/hack/boilerplate.go.txt,year=$(shell date +"%Y")" paths="./..."
 
 # Generate manifests e.g. CRD, RBAC etc
 manifests: generate $(CONTROLLER_GEN) $(VENDOR_MODULES)
