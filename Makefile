@@ -166,9 +166,9 @@ bin/subctl-%: generate-embeddedyamls $(shell find pkg/subctl/ -name "*.go") $(VE
 
 ci: generate-embeddedyamls golangci-lint markdownlint unit build images
 
-generate-embeddedyamls: generate pkg/subctl/operator/common/embeddedyamls/yamls.go
+generate-embeddedyamls: pkg/subctl/operator/common/embeddedyamls/yamls.go
 
-pkg/subctl/operator/common/embeddedyamls/yamls.go: pkg/subctl/operator/common/embeddedyamls/generators/yamls2go.go deploy/crds/submariner.io_servicediscoveries.yaml deploy/crds/submariner.io_brokers.yaml deploy/crds/submariner.io_submariners.yaml deploy/submariner/crds/submariner.io_clusters.yaml deploy/submariner/crds/submariner.io_endpoints.yaml deploy/submariner/crds/submariner.io_gateways.yaml $(shell find deploy/ -name "*.yaml") $(shell find config/rbac/ -name "*.yaml") $(VENDOR_MODULES)
+pkg/subctl/operator/common/embeddedyamls/yamls.go: pkg/subctl/operator/common/embeddedyamls/generators/yamls2go.go deploy/crds/submariner.io_servicediscoveries.yaml deploy/crds/submariner.io_brokers.yaml deploy/crds/submariner.io_submariners.yaml deploy/submariner/crds/submariner.io_clusters.yaml deploy/submariner/crds/submariner.io_endpoints.yaml deploy/submariner/crds/submariner.io_gateways.yaml $(shell find deploy/ -name "*.yaml") $(shell find config/rbac/ -name "*.yaml") $(VENDOR_MODULES) $(CONTROLLER_DEEPCOPY)
 	$(GO) generate pkg/subctl/operator/common/embeddedyamls/generate.go
 
 # Operator CRDs
